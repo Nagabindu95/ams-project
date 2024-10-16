@@ -1,39 +1,24 @@
 const mongoose = require('mongoose');
-const dbURI = 'mongodb://localhost/HMS';
-//const dbURI = 'mongodb+srv://nanibabunalli:123456au@cluster0.yzl5k.mongodb.net/Loc8r';
-
+const dbURI = 'mongodb+srv://22eg106b56:Bindu%40456@cluster1.t320w.mongodb.net/hms';
+//const dbURI = 'mongodb://localhost:27017/hms'; // Your MongoDB connection URI
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.connection.on('connected', () => {
-  console.log(`Mongoose connected to ${dbURI}`);
+  console.log('Mongoose connected to ' + dbURI);
 });
 
 mongoose.connection.on('error', err => {
-  console.log(`Mongoose connection error: ${err}`);
+  console.log('Mongoose connection error: ' + err);
 });
 
 mongoose.connection.on('disconnected', () => {
   console.log('Mongoose disconnected');
 });
 
-const gracefulShutdown = (msg, callback) => {
+// Close connection on process termination
+process.on('SIGINT', () => {
   mongoose.connection.close(() => {
-    console.log(`Mongoose disconnected through ${msg}`);
-    callback();
+    console.log('Mongoose disconnected through app termination');
+    process.exit(0);
   });
-};
-require('./locations');
-
-// // For nodemon restarts
-// process.once('SIGUSR2', () => {
-//   gracefulShutdown('nodemon restart', () => {
-//     process.kill(process.pid, 'SIGUSR2');
-//   });
-// });
-
-// // For app termination
-// process.on('SIGINT', () => {
-//   gracefulShutdown('app termination', () => {
-//     process.exit(0);
-//   });
-// });
+});

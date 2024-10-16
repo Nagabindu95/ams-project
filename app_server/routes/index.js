@@ -1,14 +1,3 @@
-// const express = require('express');
-// const router = express.Router();
-// const ctrlLocations = require('../controllers/locations');
-// const ctrlOthers = require('../controllers/others');
-// /* Locations pages */
-// router.get('/', ctrlLocations.homelist);
-// router.get('/location', ctrlLocations.locationInfo);
-// /* Other pages */
-// router.get('/about', ctrlOthers.about);
-// module.exports = router;
-
 const express = require('express');
 const router = express.Router();
 const ctrlLocations = require('../controllers/locations');
@@ -20,16 +9,17 @@ router.get('/', ctrlLocations.homelist);
 // Route with dynamic locationName parameter
 router.get('/location/:name', ctrlLocations.locationInfo);
 
-// Update this route to include the locationId for adding a review
-router.get('/location/review/new', ctrlLocations.addReview);
-router.post('/location/review', ctrlLocations.submitReview);
+// Route to load the add review page
+router.get('/location/:name/review/new', ctrlLocations.addReview);
 
-router.get('/location/appointment/new', ctrlLocations.addAppointment);
-
-// Route to handle appointment submission
-router.post('/location/appointment', ctrlLocations.submitAppointment); 
+// POST route to handle review submission
+router.post('/location/:name/review', ctrlLocations.doAddReview); // Changed from locationsController to ctrlLocations
 
 /* Other pages */
 router.get('/about', ctrlOthers.about);
 
 module.exports = router;
+
+
+
+

@@ -1,168 +1,98 @@
-const locations = [
-  {
-    name: 'City Health Hospital',
-    address: '4-106/C, Annojiguda, Hyderabad, Telangana 501301',
-    rating: 3,
-    facilities: ['Emergency care', 'Surgery', 'Pharmacy'],
-    coords: { lat: 51.455041, lng: -0.9690884 },
-    openingTimes: [
-      { days: 'Monday - Sunday', opening: '24/7', closed: false }
-    ],
-    reviews: [
-      { author: 'Nani Nalli', rating: 5, timestamp: '2013-07-16', reviewText: 'I recently visited City Health Hospital and had a largely positive experience. The hospital was clean and well-organized.' },
-      { author: 'Bala Subhramanyam', rating: 3, timestamp: '2013-06-16', reviewText: 'Convenient location, but the waiting time was a bit long.' }
-    ]
-  },
-  {
-    name: 'Metro Medical Centre',
-    address: '3-99/1, Chengicherla Road, Beside Mahadev Jewellers, Chengicherla, Hyderabad, Telangana 500092',
-    rating: 4,
-    facilities: ['Outpatient services', 'Diagnostics', 'Immunizations'],
-    coords: { lat: 51.456042, lng: -0.970088 },
-    openingTimes: [
-      { days: 'Monday - Sunday', opening: '24/7', closed: false }
-    ],
-    reviews: [
-      { author: 'Shreyansh', rating: 4, timestamp: '2013-07-20', reviewText: 'Great services and quick response times!' },
-      { author: 'Mouli', rating: 2, timestamp: '2013-06-25', reviewText: 'Good hospital, but sometimes feels understaffed during peak hours.' }
-    ]
-  },
-  {
-    name: 'HealthFirst Hospital',
-    address: 'Kamala Nagar Main Rd, Vikarabad, Telangana',
-    rating: 5,
-    facilities: ['Emergency care', 'Vaccination services', 'Health screenings'],
-    coords: { lat: 51.457042, lng: -0.971088 },
-    openingTimes: [
-      { days: 'Monday - Sunday', opening: '24/7', closed: false }
-    ],
-    reviews: [
-      { author: 'Srinivas', rating: 5, timestamp: '2013-08-10', reviewText: 'A great hospital with professional staff.' },
-      { author: 'Karthikeya', rating: 4, timestamp: '2013-08-15', reviewText: 'Quick service and reasonable prices for treatments.' }
-    ]
-  },
-  {
-    name: 'CarePlus Hospital',
-    address: '162, Korremula Road, OU Colony, Chowdhariguda, Hyderabad, Telangana 500088',
-    rating: 4,
-    facilities: ['Chronic disease management', 'Surgery', 'Medical equipment rental'],
-    coords: { lat: 51.458042, lng: -0.972088 },
-    openingTimes: [
-      { days: 'Monday - Sunday', opening: '24/7', closed: false }
-    ],
-    reviews: [
-      { author: 'Pranay Reddy', rating: 4, timestamp: '2013-09-12', reviewText: 'Nice and clean hospital. The staff is very polite.' },
-      { author: 'Koushik Reddy', rating: 3, timestamp: '2013-09-18', reviewText: 'Good healthcare options, but a bit crowded.' }
-    ]
-  },
-  {
-    name: 'PrimeCare Hospital',
-    address: 'Door No 5/123/1, Shop No 2, Boduppal Rd, Peerzadiguda, Buddha Nagar, Hyderabad, Telangana 500039',
-    rating: 3,
-    facilities: ['Emergency services', 'Medication therapy management', 'Patient transfers'],
-    coords: { lat: 51.459042, lng: -0.973088 },
-    openingTimes: [
-      { days: 'Monday - Sunday', opening: '24/7', closed: false }
-    ],
-    reviews: [
-      { author: 'Akash', rating: 3, timestamp: '2013-10-20', reviewText: 'The staff is very knowledgeable and caring.' },
-      { author: 'Tej', rating: 4, timestamp: '2013-10-25', reviewText: 'Good prices on treatments. Sometimes they run out of stock on popular items.' }
-    ]
-  },
-  {
-    name: 'Community Care Hospital',
-    address: 'D.No.1 and 2, Nadergul X Roads, Village, Nadargul, Telangana',
-    rating: 5,
-    facilities: ['Travel vaccinations', 'Health consultations', 'Compounding services'],
-    coords: { lat: 51.461042, lng: -0.975088 },
-    openingTimes: [
-      { days: 'Monday - Sunday', opening: '24/7', closed: false }
-    ],
-    reviews: [
-      { author: 'Harsha', rating: 5, timestamp: '2013-12-02', reviewText: 'Great experience! The hospital is modern and well-equipped.' },
-      { author: 'Shannu', rating: 4, timestamp: '2013-12-10', reviewText: 'I trust this hospital for all my health needs.' }
-    ]
+const Location = require('../models/location'); // Import the model
+
+// Home page listing locations
+const homelist = async (req, res) => {
+  try {
+    const locations = await Location.find(); // No callback, using await
+    res.render('locations-list', {
+      title: 'Hospital Locater',
+      pageHeader: {
+        title: 'Hospital Locater',
+        strapline: 'Find best Hospitals near You!',
+      },
+      sidebar: "Searching for a hospital with great facilities? Our Hospital Locator helps you find the best spots for all your medical needs...",
+      locations: locations // Use data from MongoDB
+    });
+  } catch (err) {
+    res.status(500).send('Error retrieving locations');
   }
-];
-
-
-// Home List Route
-const homelist = (req, res) => {
-  res.render('locations-list', {
-    title: 'Health Locator - Find Your Nearest Hospital, Anytime, Anywhere',
-    pageHeader: {
-      title: 'Health Locator',
-      strapline: 'Find Your Nearest Hospital, Anytime, Anywhere',
-    },
-    sidebar: "Searching for a hospital with great facilities? Our Hospital Locator helps you find the best spots for all your medical needs...",
-    locations: locations, // Use the locations array directly
-  });
 };
-
-// Location Info Route
-const locationInfo = (req, res) => {
+// Location detail page
+const locationInfo = async (req, res) => {
   const locationName = req.params.name.replace(/-/g, ' ');
-  const location = locations.find(loc => loc.name.toLowerCase() === locationName.toLowerCase());
-
-  if (!location) {
-    return res.status(404).send('Location not found');
+  try {
+    const location = await Location.findOne({ name: new RegExp(`^${locationName}$`, 'i') });
+    if (!location) {
+      return res.status(404).send('Location not found');
+    }
+    res.render('location-info', {
+      title: location.name,
+      pageHeader: { title: location.name },
+      sidebar: {
+        context: `is part of Onile Groceries because it offers a variety of products including grocery essentials.`,
+        callToAction: `To Contact Us:\nGmail: ${location.gmail}\nPhone: ${location.phno}`
+      },
+      location: location
+    });
+  } catch (err) {
+    res.status(500).send('Error retrieving location');
   }
-
-  res.render('location-info', {
-    title: location.name,
-    pageHeader: { title: location.name },
-    sidebar: {
-      context: `${location.name} is on Health Locator because it has great services and accessible facilities.`,
-      callToAction: 'If you\'ve been and you like it - or if you don\'t - please leave a review to help other people just like you.',
-    },
-    location: location
-  });
 };
 
+// Add Review Form Page (GET Request)
+const addReview = async (req, res) => {
+  const locationName = req.params.name.replace(/-/g, ' '); // Get the location name from the URL
+  try {
+    const location = await Location.findOne({ name: new RegExp(`^${locationName}$`, 'i') }); // Find location by name
+    if (!location) {
+      return res.status(404).send('Location not found'); // Handle location not found
+    }
 
-
-
-// Add Review Page
-const addReview = (req, res) => {
-  res.render('location-review-form.jade', {
-    title: 'Review on HMS',
-    pageHeader: { title: 'Add my Review' }
-  });
-};
-// Handle Review Submission
-const submitReview = (req, res) => {
-  // You can log the review details for now (or store them in a database when ready)
-  console.log('Review submitted:', req.body);
-  
-  // Redirect to the home page after submission
-  res.redirect('/');
-};
-
-
-
-// Add Appointment Page
-const addAppointment = (req, res) => {
-  res.render('location-appointment-form.jade', {
-    title: 'Book an Appointment',
-    pageHeader: { title: 'Book an Appointment' }
-  });
+    // Render the add review page
+    res.render('location-review-form', {
+      title: `Add Review for ${location.name}`,
+      pageHeader: { title: `Review ${location.name}` },
+      location: location // Pass the location to the view for context
+    });
+  } catch (err) {
+    res.status(500).send('Error retrieving location'); // Handle errors during location retrieval
+  }
 };
 
-// Handle Appointment Submission
-const submitAppointment = (req, res) => {
-  // Log appointment details for now (or store them in a database when ready)
-  console.log('Appointment booked:', req.body);
-  
-  // Redirect to the home page after submission
-  res.redirect('/');
+// Handle Review Submission (POST Request)
+const doAddReview = async (req, res) => {
+  const locationName = req.params.name.replace(/-/g, ' ');
+  try {
+    const location = await Location.findOne({ name: new RegExp(`^${locationName}$`, 'i') });
+
+    if (!location) {
+      return res.status(404).send('Location not found');
+    }
+
+    // Create new review object
+    const newReview = {
+      author: req.body.name,
+      rating: parseInt(req.body.rating, 10),
+      timestamp: new Date(),
+      reviewText: req.body.review
+    };
+
+    // Add the new review to the location's reviews array
+    location.reviews.push(newReview);
+
+    // Save the updated location document to MongoDB
+    await location.save();
+
+    // Redirect back to the location info page
+    res.redirect(`/location/${req.params.name}`);
+  } catch (err) {
+    res.status(500).send('Error adding review');
+  }
 };
 
-// Export your functions
 module.exports = {
   homelist,
   locationInfo,
   addReview,
-  submitReview,
-  addAppointment, // Add this line
-  submitAppointment // Add this line
+  doAddReview // Export the new function
 };
