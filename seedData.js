@@ -17,6 +17,7 @@ const locations= [
     ],
     contact: {
       phone: '+91-1234567890',
+      gmail: 'info@cityhealthhospital.com',
       email: 'info@cityhealthhospital.com',
       website: 'https://www.cityhealthhospital.com'
     }
@@ -37,6 +38,7 @@ const locations= [
     ],
     contact: {
       phone: '+91-9876543210',
+      gmail: 'contact@metromedicalcentre.com',
       email: 'contact@metromedicalcentre.com',
       website: 'https://www.metromedicalcentre.com'
     }
@@ -57,6 +59,7 @@ const locations= [
     ],
     contact: {
       phone: '+91-9090909090',
+      gmail: 'support@healthfirsthospital.com',
       email: 'support@healthfirsthospital.com',
       website: 'https://www.healthfirsthospital.com'
     }
@@ -77,6 +80,7 @@ const locations= [
     ],
     contact: {
       phone: '+91-8080808080',
+      gmail: 'info@careplushospital.com',
       email: 'info@careplushospital.com',
       website: 'https://www.careplushospital.com'
     }
@@ -97,6 +101,7 @@ const locations= [
     ],
     contact: {
       phone: '+91-7070707070',
+      gmail: 'contact@primecarehospital.com',
       email: 'contact@primecarehospital.com',
       website: 'https://www.primecarehospital.com'
     }
@@ -117,6 +122,7 @@ const locations= [
     ],
     contact: {
       phone: '+91-6060606060',
+      gmail: 'info@communitycarehospital.com',
       email: 'info@communitycarehospital.com',
       website: 'https://www.communitycarehospital.com'
     }
@@ -124,8 +130,8 @@ const locations= [
 ];
 
 
-  
-mongoose.connect('mongodb+srv://22eg106b56:Bindu%40456@cluster1.t320w.mongodb.net/hms', { useNewUrlParser: true, useUnifiedTopology: true })
+// Using local MongoDB instance instead of remote cluster
+mongoose.connect('mongodb://localhost:27017/hms', { })
   .then(() => {
     console.log('Connected to MongoDB');
     return Location.insertMany(locations);
