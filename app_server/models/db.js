@@ -3,7 +3,19 @@ const mongoose = require('mongoose');
 // Use environment variable for MongoDB URI or fallback to local instance
 const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hms';
 
-mongoose.connect(dbURI, { });
+// MongoDB connection options
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+};
+
+// Add SSL options if connecting to Atlas
+if (dbURI.includes('mongodb+srv')) {
+  options.ssl = true;
+  options.sslValidate = false; // Disable SSL validation for compatibility
+}
+
+mongoose.connect(dbURI, options);
 
 mongoose.connection.on('connected', () => {
   console.log('Mongoose connected to ' + dbURI);
