@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const dbURI = 'mongodb+srv://22eg106b56:Bindu%40456@cluster1.t320w.mongodb.net/hms';
+// Using local MongoDB instance instead of remote cluster
+const dbURI = 'mongodb://localhost:27017/hms';
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(dbURI, { });
 
 mongoose.connection.on('connected', () => {
   console.log('Mongoose connected to ' + dbURI);
@@ -26,4 +27,3 @@ process.on('SIGINT', async () => {
     process.exit(1);
   }
 });
-
