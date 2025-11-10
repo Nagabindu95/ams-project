@@ -9,7 +9,7 @@ html
   body
     nav.navbar.fixed-top.navbar-expand-md.navbar-light
       .container
-        a.navbar-brand.navhead(href='/') Hospital Locater
+        a.navbar-brand.navhead(href='/') Appointment Booking System
         button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarMain')
           span.navbar-toggler-icon
         #navbarMain.navbar-collapse.collapse
@@ -21,7 +21,57 @@ html
     footer
       .row
         .col-12
-          small © Hospital Locater(2024)  - Developed Using Mean
+          small © Appointment Booking System(2024)  - Developed Using Mean
+    
+    // Floating Action Button
+    .floating-btn#helpBtn
+      i.fa.fa-question
+    
+    // Overlay Modal
+    .overlay-modal#helpModal
+      .modal-content
+        .modal-header
+          h2 Help & Support
+          button.close-btn#closeModal ×
+        .modal-body
+          p Welcome to the Appointment Booking System! Here's how to use our platform:
+          ul
+            li Browse hospitals using the list below
+            li Click on any hospital to view details
+            li Check opening hours and facilities
+            li Read patient reviews before booking
+            li Use the contact information to book appointments
+          p For assistance, contact our support team:
+          p
+            i.fa.fa-envelope.mr-2
+            | support@appointmentbooking.com
+          p
+            i.fa.fa-phone.mr-2
+            | +1 (800) 123-4567
+    
     script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo', crossorigin='anonymous')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js', integrity='sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49', crossorigin='anonymous')
     script(src='/javascripts/bootstrap.min.js')
+    script.
+      // Modal functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const helpBtn = document.getElementById('helpBtn');
+        const closeModal = document.getElementById('closeModal');
+        const helpModal = document.getElementById('helpModal');
+        
+        if (helpBtn && closeModal && helpModal) {
+          helpBtn.addEventListener('click', function() {
+            helpModal.classList.add('active');
+          });
+          
+          closeModal.addEventListener('click', function() {
+            helpModal.classList.remove('active');
+          });
+          
+          helpModal.addEventListener('click', function(e) {
+            if (e.target === helpModal) {
+              helpModal.classList.remove('active');
+            }
+          });
+        }
+      });
