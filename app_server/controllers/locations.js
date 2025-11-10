@@ -5,18 +5,19 @@ const homelist = async (req, res) => {
   try {
     const locations = await Location.find(); // No callback, using await
     res.render('locations-list', {
-      title: 'Hospital Locater',
+      title: 'Appointment Booking System',
       pageHeader: {
-        title: 'Hospital Locater',
-        strapline: 'Find best Hospitals near You!',
+        title: 'Appointment Booking System',
+        strapline: 'Find and book appointments at the best medical facilities near you!',
       },
-      sidebar: "Searching for a hospital with great facilities? Our Hospital Locator helps you find the best spots for all your medical needs...",
+      sidebar: "Searching for a medical facility with great services? Our Appointment Booking System helps you find the best spots and book appointments for all your medical needs...",
       locations: locations // Use data from MongoDB
     });
   } catch (err) {
     res.status(500).send('Error retrieving locations');
   }
 };
+
 // Location detail page
 const locationInfo = async (req, res) => {
   const locationName = req.params.name.replace(/-/g, ' ');
@@ -29,7 +30,7 @@ const locationInfo = async (req, res) => {
       title: location.name,
       pageHeader: { title: location.name },
       sidebar: {
-        context: `is part of Onile Groceries because it offers a variety of products including grocery essentials.`,
+        context: `is part of our medical network because it offers a variety of healthcare services.`,
         callToAction: `To Contact Us:\nGmail: ${location.gmail}\nPhone: ${location.phno}`
       },
       location: location
