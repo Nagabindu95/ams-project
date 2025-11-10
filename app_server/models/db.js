@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-// Using local MongoDB instance instead of remote cluster
-const dbURI = 'mongodb://localhost:27017/hms';
+
+// Use environment variable for MongoDB URI or fallback to local instance
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hms';
 
 mongoose.connect(dbURI, { });
 
