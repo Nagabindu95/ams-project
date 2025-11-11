@@ -21,6 +21,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Serve Angular build in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'app_public', 'dist', 'app_public', 'browser')));
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

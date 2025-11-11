@@ -2,7 +2,11 @@
   "name": "class-project",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
+    "build": "npm install && cd app_public && npm install && npm run build && cd ..",
     "start": "node ./bin/www"
   },
   "dependencies": {

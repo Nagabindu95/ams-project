@@ -2,12 +2,12 @@ services:
   - type: web
     name: appointment-booking-system
     env: node
-    buildCommand: npm install
+    buildCommand: npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: MONGODB_URI
-        sync: false
+        value: mongodb+srv://22eg106b56:22eg106b56@cluster1.t320w.mongodb.net/hms?retryWrites=true&w=majority
     healthCheckPath: /
     autoDeploy: true

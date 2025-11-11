@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const Location = require('./app_server/models/location'); // Path to your model
-const locations= [
+const Location = require('../models/location');
+
+const locations = [
   {
     name: 'City Health Hospital',
     address: '4-106/C, Annojiguda, Hyderabad, Telangana 501301',
@@ -12,7 +13,7 @@ const locations= [
       { days: 'Saturday', opening: '09:00 AM', closing: '06:00 PM', closed: false },
       { days: 'Sunday', opening: '10:00 AM', closing: '04:00 PM', closed: false }
     ],
-    imageSrc : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNUW5UiS-v8sda36VVD0u4IuFGiITezljsMg&s',
+    imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNUW5UiS-v8sda36VVD0u4IuFGiITezljsMg&s',
     reviews: [
       { author: 'Nani Nalli', rating: 5, timestamp: '2023-07-16', reviewText: 'I recently visited City Health Hospital and had a largely positive experience. The hospital was clean and well-organized. The staff were professional and courteous.' },
       { author: 'Bala Subhramanyam', rating: 4, timestamp: '2023-06-16', reviewText: 'Convenient location with excellent medical facilities. The waiting time was reasonable and the doctors were knowledgeable.' },
@@ -36,7 +37,7 @@ const locations= [
       { days: 'Saturday', opening: '08:00 AM', closing: '07:00 PM', closed: false },
       { days: 'Sunday', opening: '09:00 AM', closing: '05:00 PM', closed: false }
     ],
-    imageSrc : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT88AMyEnjMHycJ8c3ulNKUWkwJlxgBzBHiNg&s',
+    imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT88AMyEnjMHycJ8c3ulNKUWkwJlxgBzBHiNg&s',
     reviews: [
       { author: 'Shreyansh', rating: 4, timestamp: '2023-07-20', reviewText: 'Great services and quick response times! The diagnostic department is particularly efficient.' },
       { author: 'Mouli', rating: 4, timestamp: '2023-06-25', reviewText: 'Good hospital with modern facilities. The cardiology department is excellent.' },
@@ -58,7 +59,7 @@ const locations= [
     openingTimes: [
       { days: 'Monday - Sunday', opening: '24/7', closed: false }
     ],
-    imageSrc : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_Ds32x9Y2tAWeur8i422IlgskLJjUhxMoxQ&s',
+    imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_Ds32x9Y2tAWeur8i422IlgskLJjUhxMoxQ&s',
     reviews: [
       { author: 'Srinivas', rating: 5, timestamp: '2023-08-10', reviewText: 'A great hospital with professional staff. The emergency department is always ready and responsive.' },
       { author: 'Karthikeya', rating: 5, timestamp: '2023-08-15', reviewText: 'Quick service and reasonable prices for treatments. The maternity ward is exceptional.' },
@@ -82,7 +83,7 @@ const locations= [
       { days: 'Saturday', opening: '08:00 AM', closing: '06:00 PM', closed: false },
       { days: 'Sunday', opening: '09:00 AM', closing: '03:00 PM', closed: false }
     ],
-    imageSrc : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdTGovjxaZWbC0G7NXQ8hl379ec_rYuDQwNA&s',
+    imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdTGovjxaZWbC0G7NXQ8hl379ec_rYuDQwNA&s',
     reviews: [
       { author: 'Pranay Reddy', rating: 4, timestamp: '2023-09-12', reviewText: 'Nice and clean hospital. The staff is very polite and the facilities are modern.' },
       { author: 'Koushik Reddy', rating: 4, timestamp: '2023-09-18', reviewText: 'Good healthcare options with specialized departments. The dermatology clinic is excellent.' },
@@ -106,7 +107,7 @@ const locations= [
       { days: 'Saturday', opening: '09:00 AM', closing: '05:00 PM', closed: false },
       { days: 'Sunday', closed: true }
     ],
-    imageSrc : 'https://images1-fabric.practo.com/practices/1138452/primecare-hospital-bangalore-5a30d6a8801a6.jpg',
+    imageSrc: 'https://images1-fabric.practo.com/practices/1138452/primecare-hospital-bangalore-5a30d6a8801a6.jpg',
     reviews: [
       { author: 'Akash', rating: 4, timestamp: '2023-10-20', reviewText: 'The staff is very knowledgeable and caring. They provide personalized attention to each patient.' },
       { author: 'Tej', rating: 4, timestamp: '2023-10-25', reviewText: 'Good prices on treatments. Sometimes they run out of stock on popular items, but the service is generally good.' },
@@ -130,7 +131,7 @@ const locations= [
       { days: 'Saturday', opening: '08:00 AM', closing: '06:00 PM', closed: false },
       { days: 'Sunday', opening: '09:00 AM', closing: '04:00 PM', closed: false }
     ],
-    imageSrc : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKpl9NXT2DwDO9KfNxjlxTW8bOA47irsMJ0A&s',
+    imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKpl9NXT2DwDO9KfNxjlxTW8bOA47irsMJ0A&s',
     reviews: [
       { author: 'Harsha', rating: 5, timestamp: '2023-12-02', reviewText: 'Great experience! The hospital is modern and well-equipped. The preventive care programs are excellent.' },
       { author: 'Shannu', rating: 5, timestamp: '2023-12-10', reviewText: 'I trust this hospital for all my health needs. The family medicine department is outstanding.' },
@@ -145,22 +146,21 @@ const locations= [
   }
 ];
 
+async function seedDatabase() {
+  try {
+    // Check if data already exists
+    const existingCount = await Location.countDocuments();
+    
+    if (existingCount === 0) {
+      console.log('Database is empty. Seeding with initial data...');
+      await Location.insertMany(locations);
+      console.log('✅ Database seeded successfully with 6 hospitals');
+    } else {
+      console.log(`Database already has ${existingCount} locations. Skipping seed.`);
+    }
+  } catch (err) {
+    console.error('❌ Error seeding database:', err);
+  }
+}
 
-// Using local MongoDB instance instead of remote cluster
-const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hms';
-const options = {
-  ssl: dbURI.includes('mongodb+srv')
-};
-
-mongoose.connect(dbURI, options)
-  .then(() => {
-    console.log('Connected to MongoDB');
-    return Location.insertMany(locations);
-  })
-  .then(() => {
-    console.log('Data successfully inserted!');
-    mongoose.connection.close();
-  })
-  .catch(err => {
-    console.error('Error inserting data:', err);
-  });
+module.exports = seedDatabase;
